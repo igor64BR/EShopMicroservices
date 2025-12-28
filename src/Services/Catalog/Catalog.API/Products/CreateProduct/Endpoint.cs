@@ -1,5 +1,30 @@
 ﻿namespace Catalog.API.Products.CreateProduct;
 
-public class Endpoint
+public record CreateProductRequest(
+    string Name,
+    List<string> Category,
+    string Description,
+    string ImageFile,
+    decimal Price);
+
+public record CreateProductResponse(Guid Id);
+
+public class Endpoint : ICarterModule
 {
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPost("/products", async (CreateProductRequest request, ISender sender, CancellationToken cancellationToken) =>
+        {
+            var command = request.Adapt<Command>();
+
+            var result = await sender.Send(command, cancellationToken);
+
+            var response = result.Adapt<CreateProductResponse>();
+
+            return Results.Created($"/products/{response.Id}", response);
+        }).WithName(nameof(CreateProduct))
+        .WithSummary("Create Product").WithDescription("Create Product")
+        .Produces<CreateProductResponse>(StatusCodes.Status201Created)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+    }
 }

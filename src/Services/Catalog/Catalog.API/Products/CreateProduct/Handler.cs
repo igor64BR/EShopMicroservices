@@ -1,7 +1,4 @@
-﻿using BuildingBlocks.CQRS;
-using Catalog.API.Models;
-
-namespace Catalog.API.Products.CreateProduct;
+﻿namespace Catalog.API.Products.CreateProduct;
 
 public record Command(
     string Name,
@@ -12,7 +9,7 @@ public record Command(
 
 public record Result(Guid Id);
 
-public class Handler : ICommandHandler<Command, Result>
+public class Handler(IDocumentSession session) : ICommandHandler<Command, Result>
 {
     public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
     {
@@ -25,9 +22,9 @@ public class Handler : ICommandHandler<Command, Result>
             Price = command.Price
         };
 
-        // TODO: Save product to database
-        var resultId = Guid.NewGuid(); // Simulate database generated Id
+        session.Store(product);
+        await session.SaveChangesAsync(cancellationToken);
 
-        return new(resultId);
+        return new(product.Id);
     }
 }
