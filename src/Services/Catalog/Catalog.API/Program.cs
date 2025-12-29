@@ -18,8 +18,10 @@ builder.Services.ConfigureSwagger();
 
 var app = builder.Build();
 
-// Configure the HTTP requestpipeline here
+// Configure the HTTP request pipeline here
+app.ConfigureGlobalExceptionHandling();
 app.ConfigureSwagger();
+
 app.MapCarter();
 
 app.Run();
