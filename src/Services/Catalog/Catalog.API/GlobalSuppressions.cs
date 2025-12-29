@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Performance", "CA1873:Avoid potentially expensive logging", Justification = "<Pending>", Scope = "member", Target = "~M:Catalog.API.Products.GetProducts.Handler.Handle(Catalog.API.Products.GetProducts.Query,System.Threading.CancellationToken)~System.Threading.Tasks.Task{Catalog.API.Products.GetProducts.Result}")]
+[assembly: SuppressMessage("Performance", "CA1873:Avoid potentially expensive logging", Justification = "<Pending>")]
