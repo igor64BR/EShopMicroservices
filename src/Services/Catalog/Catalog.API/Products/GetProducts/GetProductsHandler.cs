@@ -1,15 +1,15 @@
 ﻿namespace Catalog.API.Products.GetProducts;
 
-public record Query(Guid? Id = null) : IQuery<Result>;
+public record GetProductsQuery(Guid? Id = null) : IQuery<GetProductsResult>;
 
-public record Result(IEnumerable<Product> Products);
+public record GetProductsResult(IEnumerable<Product> Products);
 
-public class Handler(
+public class GetProductsHandler(
     IDocumentSession session,
-    ILogger<Handler> logger) : IQueryHandler<Query, Result>
+    ILogger<GetProductsHandler> logger) : IQueryHandler<GetProductsQuery, GetProductsResult>
 {
-    public async Task<Result> Handle(
-        Query request,
+    public async Task<GetProductsResult> Handle(
+        GetProductsQuery request,
         CancellationToken cancellationToken)
     {
         logger.LogInformation("Handling GetProducts Query for Id: {Id}", request.Id);
@@ -23,6 +23,6 @@ public class Handler(
 
         logger.LogInformation("Retrieved {Count} products", products.Count);
 
-        return new Result(products);
+        return new GetProductsResult(products);
     }
 }

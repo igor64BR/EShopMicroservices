@@ -9,13 +9,13 @@ public record CreateProductRequest(
 
 public record CreateProductResponse(Guid Id);
 
-public class Endpoint : ICarterModule
+public class CreateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost("/products", async (CreateProductRequest request, ISender sender, CancellationToken cancellationToken) =>
         {
-            var command = request.Adapt<Command>();
+            var command = request.Adapt<CreateProductCommand>();
 
             var result = await sender.Send(command, cancellationToken);
 

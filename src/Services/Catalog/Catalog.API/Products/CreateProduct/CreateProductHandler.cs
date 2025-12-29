@@ -1,17 +1,17 @@
 ﻿namespace Catalog.API.Products.CreateProduct;
 
-public record Command(
+public record CreateProductCommand(
     string Name,
     List<string> Category,
     string Description,
     string ImageFile,
-    decimal Price) : ICommand<Result>;
+    decimal Price) : ICommand<CreateProductResult>;
 
-public record Result(Guid Id);
+public record CreateProductResult(Guid Id);
 
-public class Handler(IDocumentSession session) : ICommandHandler<Command, Result>
+public class CreateProductHandler(IDocumentSession session) : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
-    public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
+    public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
         var product = new Product()
         {

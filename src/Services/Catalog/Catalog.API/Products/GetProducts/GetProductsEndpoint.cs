@@ -1,8 +1,8 @@
 ﻿namespace Catalog.API.Products.GetProducts;
 
-public record GetProductResponse(IEnumerable<Product> Products);
+public record GetProductsResponse(IEnumerable<Product> Products);
 
-public class Endpoint : ICarterModule
+public class GetProductsEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
@@ -11,13 +11,13 @@ public class Endpoint : ICarterModule
             ISender sender,
             CancellationToken cancellationToken) =>
         {
-            var query = new Query(id);
+            var query = new GetProductsQuery(id);
             var result = await sender.Send(query, cancellationToken);
 
-            var response = result.Adapt<GetProductResponse>();
+            var response = result.Adapt<GetProductsResponse>();
 
             return Results.Ok(result);
-        }).WithName("GetProducts").Produces<GetProductResponse>(StatusCodes.Status200OK)
+        }).WithName("GetProducts").Produces<GetProductsResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Get Products from db")
         .WithDescription("Get all products from database based on the query parameters");
