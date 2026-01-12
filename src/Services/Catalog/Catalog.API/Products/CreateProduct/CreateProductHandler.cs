@@ -22,15 +22,15 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
 internal class CreateProductHandler(
     IDocumentSession session,
-    IValidator<CreateProductCommand> validator) : ICommandHandler<CreateProductCommand, CreateProductResult>
+    ILogger<CreateProductHandler> logger) : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        var result = await validator.ValidateAsync(command, cancellationToken);
-        var errors = result.Errors.Select(x => x.ErrorMessage).ToList();
-
-        if (errors.Count != 0)
-            throw new ValidationException(errors.FirstOrDefault());
+        logger.LogInformation(
+            "Creating product. Name=\"{Name}\", CategoryCount={CategoryCount}, Price={Price}",
+            command.Name,
+            command.Category.Count,
+            command.Price);
 
         var product = new Product()
         {
