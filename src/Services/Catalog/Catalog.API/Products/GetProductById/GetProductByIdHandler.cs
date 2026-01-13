@@ -16,7 +16,7 @@ public class GetProductByIdHandler(
         if (product == null)
         {
             logger.LogWarning("Product with Id: {Id} not found", request.Id);
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(request.Id);
         }
 
         return new(product);

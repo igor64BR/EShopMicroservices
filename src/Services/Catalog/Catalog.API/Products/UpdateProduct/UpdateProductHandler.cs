@@ -36,7 +36,7 @@ public class UpdateProductHandler(
         if (product == null)
         {
             logger.LogError("Product with ID {ProductId} not found", request.Id);
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(request.Id);
         }
 
         request.Adapt(product);
