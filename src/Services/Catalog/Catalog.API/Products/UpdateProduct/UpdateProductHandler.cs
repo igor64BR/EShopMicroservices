@@ -10,6 +10,19 @@ public record UpdateProductCommand(
     string ImageFile,
     decimal Price) : ICommand;
 
+public class UpdateProductValidator : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Product ID is required");
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Name is required")
+            .Length(2, 256).WithMessage("Name must have between 2 and 256 characters");
+
+        RuleFor(x => x.Price).GreaterThan(0).WithMessage("Price must be greater than 0");
+    }
+}
+
 public class UpdateProductHandler(
     IDocumentSession session,
     ILogger<UpdateProductHandler> logger) : ICommandHandler<UpdateProductCommand>
