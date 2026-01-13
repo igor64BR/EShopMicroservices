@@ -1,4 +1,5 @@
 using BuildingBlocks.Behavior;
+using BuildingBlocks.Exceptions.Handler;
 using Catalog.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,10 +24,12 @@ builder.Services.AddMarten(cfg =>
 
 builder.Services.ConfigureSwagger();
 
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline here
-app.ConfigureGlobalExceptionHandling();
+app.UseExceptionHandler(opt => { });
 app.ConfigureSwagger();
 
 app.MapCarter();
