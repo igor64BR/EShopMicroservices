@@ -1,8 +1,8 @@
 ﻿namespace Catalog.API.Products.GetProducts;
 
-public record GetProductsQuery(Guid? Id = null) : IQuery<GetProductsResult>;
+public record GetProductsQuery(int PageNumber = 1, int PageSize = 10) : IQuery<GetProductsResult>;
 
-public record GetProductsResult(IEnumerable<Product> Products);
+public record GetProductsResult(IPagedList<Product> Products);
 
 public class GetProductsHandler(
     IDocumentSession session) : IQueryHandler<GetProductsQuery, GetProductsResult>
@@ -11,12 +11,10 @@ public class GetProductsHandler(
         GetProductsQuery request,
         CancellationToken cancellationToken)
     {
-        var query = session.Query<Product>();
-
-        var products = request.Id.HasValue
-            ? await query.Where(x => x.Id == request.Id)
-                .ToListAsync(cancellationToken)
-            : await session.Query<Product>().ToListAsync(cancellationToken);
+        var products = await session.Query<Product>().ToPagedListAsync(
+            request.PageNumber,
+            request.PageSize,
+            cancellationToken);
 
         return new GetProductsResult(products);
     }
