@@ -7,7 +7,8 @@ namespace BuildingBlocks.Behavior;
 public class ValidationBehavior<TRequest, TResponse>(
     IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : ICommand<TResponse>
+    where TRequest : notnull, ICommand<TResponse>
+    where TResponse : notnull
 {
     public async Task<TResponse> Handle(
         TRequest request,
