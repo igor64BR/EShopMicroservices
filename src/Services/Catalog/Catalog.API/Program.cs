@@ -18,12 +18,9 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddCarter();
 
-builder.Services.AddMarten(cfg =>
-{
-    cfg.Connection(builder.Configuration.GetConnectionString("Database")!);
-}).UseLightweightSessions();
+builder.ConfigureMarten();
 
-builder.Services.ConfigureSwagger();
+builder.ConfigureSwagger();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 

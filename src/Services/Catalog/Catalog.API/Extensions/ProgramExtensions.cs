@@ -1,13 +1,28 @@
-﻿namespace Catalog.API.Extensions;
+﻿using Catalog.API.Data;
+
+namespace Catalog.API.Extensions;
 
 public static class ProgramExtensions
 {
-    extension(IServiceCollection services)
+    extension(WebApplicationBuilder builder)
     {
         public void ConfigureSwagger()
         {
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+        }
+
+        public void ConfigureMarten()
+        {
+            builder.Services.AddMarten(cfg =>
+            {
+                cfg.Connection(builder.Configuration.GetConnectionString("Database")!);
+            }).UseLightweightSessions();
+
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.InitializeMartenWith<CatalogInitialData>();
+            }
         }
     }
 
